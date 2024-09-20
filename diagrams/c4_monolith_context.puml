@@ -1,0 +1,29 @@
+@startuml
+title Диаграмма контекста для Smart Home Company
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+SHOW_PERSON_OUTLINE()
+
+Boundary(home, "Дом пользователя", "удалённый объект") {
+Person_Ext(user, "Пользователь", "Пользователь, управляющий температурой удалённо")
+System_Ext(modules, "API модуля", "API модуля для получения данных и управления температурой")
+}
+
+Enterprise_Boundary(company, "Smart Home Company") {
+System(SmartHomeSystem, "Smart Home System", "Система управления температурными модулями, пользователями")
+Person(admin, "Администратор", "Администратор управляющий системой")
+}
+
+System_Ext(payment, "Платёжный провайдер", "Обработка платежей")
+
+Rel(user, SmartHomeSystem, "Использует систему")
+Rel(admin, SmartHomeSystem, "Управляет системой")
+Rel(SmartHomeSystem, modules, "Получает данные управляет температурой", sync)
+Rel(SmartHomeSystem, payment, "Обработка платежей за сервис", sync)
+
+SHOW_LEGEND()
+
+@enduml
