@@ -6,8 +6,6 @@ title Диаграмма контейнеров для Smart Home Company
 SHOW_PERSON_OUTLINE()
 AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
 AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
-AddRelTag("async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DashedLine())
-AddRelTag("sync/async", $textColor=$ARROW_FONT_COLOR, $lineColor=$ARROW_COLOR, $lineStyle=DottedLine())
 
 Boundary(home, "Дом пользователя", "удалённый объект") {
     Person_Ext(user, "Пользователь", "Управляет умным домом")
