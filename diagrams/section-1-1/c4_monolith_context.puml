@@ -8,13 +8,13 @@ top to bottom direction
 SHOW_PERSON_OUTLINE()
 
 Boundary(home, "Дом пользователя", "удалённый объект") {
-Person_Ext(user, "Пользователь", "Пользователь, управляющий температурой удалённо")
-System_Ext(modules, "API модуля", "API модуля для получения данных и управления температурой")
+    Person_Ext(user, "Пользователь", "Управляет температурой удалённо")
+    System_Ext(modules, "API модуля", "Получения данных и управление температурой")
 }
 
 Enterprise_Boundary(company, "Smart Home Company") {
-System(SmartHomeSystem, "Smart Home System", "Система управления температурными модулями, пользователями")
-Person(admin, "Администратор", "Администратор управляющий системой")
+    System(SmartHomeSystem, "Smart Home System", "Управляет температурными модулями, пользователями")
+    Person(admin, "Администратор", "Управляет системой")
 }
 
 System_Ext(payment, "Платёжный провайдер", "Обработка платежей")
