@@ -1,0 +1,70 @@
+@startuml
+
+title Диаграмма классов для Сервиса телеметрии
+
+package "Telemetry Service" {
+
+    class TelemetryConsumer {
+        + onTelemetryReceived(telemetryMessage: TelemetryMessage): void
+    }
+
+    class TelemetryProcessor {
+        + processTelemetry(telemetryMessage: TelemetryMessage): TelemetryData
+    }
+
+    interface TelemetryRepository {
+        + save(telemetryData: TelemetryData): void
+        + findByDeviceId(deviceId: UUID): List<TelemetryData>
+        + findByDeviceIdAndTimestampBetween(deviceId: UUID, start: Instant, end: Instant): List<TelemetryData>
+    }
+
+    class TelemetryController {
+        + getLatestTelemetry(deviceId: UUID): ResponseEntity<TelemetryDto>
+        + getTelemetryHistory(deviceId: UUID, start: Instant, end: Instant): ResponseEntity<List<TelemetryDto>>
+    }
+
+    class EventPublisher {
+        + publishTelemetryEvent(telemetryEvent: TelemetryEvent): void
+    }
+
+    class TelemetryMessage {
+        - deviceId: UUID
+        - timestamp: Instant
+        - data: Map<String, Object>
+    }
+
+    class TelemetryData {
+        - id: UUID
+        - deviceId: UUID
+        - timestamp: Instant
+        - data: Map<String, Object>
+    }
+
+    class TelemetryEvent {
+        - deviceId: UUID
+        - eventType: TelemetryEventType
+        - data: Map<String, Object>
+        - timestamp: Instant
+    }
+
+    enum TelemetryEventType {
+        TELEMETRY_RECEIVED
+    }
+
+    ' Взаимосвязи
+    TelemetryConsumer --> TelemetryProcessor : использует
+    TelemetryProcessor --> TelemetryRepository : использует
+    TelemetryProcessor --> EventPublisher : использует
+    TelemetryController --> TelemetryRepository : использует
+    EventPublisher ..> KafkaTemplate : использует
+    TelemetryConsumer ..> MqttListener : слушает топик
+    TelemetryRepository ..|> CrudRepository
+    TelemetryProcessor ..> TelemetryData : создаёт
+    TelemetryController ..> TelemetryDto : возвращает
+
+    class KafkaTemplate
+    class MqttListener
+
+}
+
+@enduml

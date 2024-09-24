@@ -19,7 +19,7 @@ Rel(notificationProcessor, notificationSender, "Формирует уведом�
 Rel(notificationProcessor, notificationRepository, "Читает настройки")
 Rel(notificationRepository, notificationDB, "Читает и пишет")
 Rel(eventController, notificationDB, "Читает и пишет")
-Rel(notificationSender, user, "Отправляет уведомления", "Push/SMS/Email")
+Rel(notificationSender, user, "Отправляет уведомления", "Push")
 
 SHOW_LEGEND()
 @enduml
