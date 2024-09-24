@@ -10,6 +10,7 @@ SHOW_PERSON_OUTLINE()
 Boundary(home, "Дом пользователя", "удалённый объект") {
     Person_Ext(user, "Пользователь", "Управляет температурой удалённо")
     System_Ext(modules, "API модуля", "Получения данных и управление температурой")
+    Person_Ext(specialist, "Специалист по установке", "Устанавливает и подключает модули")
 }
 
 Enterprise_Boundary(company, "Smart Home Company") {
@@ -17,12 +18,10 @@ Enterprise_Boundary(company, "Smart Home Company") {
     Person(admin, "Администратор", "Управляет системой")
 }
 
-System_Ext(payment, "Платёжный провайдер", "Обработка платежей")
-
 Rel(user, SmartHomeSystem, "Использует систему")
 Rel(admin, SmartHomeSystem, "Управляет системой")
 Rel(SmartHomeSystem, modules, "Получает данные управляет температурой", sync)
-Rel(SmartHomeSystem, payment, "Обработка платежей за сервис", sync)
+Rel(specialist, modules, "Устанавливает и подключает")
 
 SHOW_LEGEND()
 
