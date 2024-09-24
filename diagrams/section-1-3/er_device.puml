@@ -1,0 +1,49 @@
+@startuml
+
+title ER-диаграмма для Сервиса управления устройствами
+
+
+entity "Device" as D {
+  * id : UUID
+  --
+  name : String
+  status : DeviceStatus
+  type : DeviceType
+  metadata : JSON
+}
+
+entity "CommandMessage" as CM {
+  * id : UUID
+  --
+  device_id : UUID
+  command : String
+  parameters : JSON
+  timestamp : LocalDateTime
+}
+
+entity "CommandConfirmation" as CC {
+  * id : UUID
+  --
+  device_id : UUID
+  command_id : UUID
+  status : CommandStatus
+  message : String
+  timestamp : LocalDateTime
+}
+
+entity "DeviceEvent" as DE {
+  * id : UUID
+  --
+  device_id : UUID
+  event_type : DeviceEventType
+  payload : JSON
+  timestamp : LocalDateTime
+}
+
+' Взаимосвязи между сущностями
+D ||--o{ CM : отправляет \nкоманды
+D ||--o{ CC : получает \nподтверждения
+D ||--o{ DE : генерирует \nсобытия
+CM ||--|| CC : подтверждается
+
+@enduml

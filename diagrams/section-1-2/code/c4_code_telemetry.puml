@@ -8,59 +8,59 @@ package "Telemetry Service" {
         + onTelemetryReceived(telemetryMessage: TelemetryMessage): void
     }
 
+    class EventPublisher {
+            + publishTelemetryEvent(telemetryEvent: TelemetryEvent): void
+    }
+
     class TelemetryProcessor {
-        + processTelemetry(telemetryMessage: TelemetryMessage): TelemetryData
+        + processTelemetry(telemetryMessage: TelemetryMessage): void
     }
 
     interface TelemetryRepository {
-        + save(telemetryData: TelemetryData): void
-        + findByDeviceId(deviceId: UUID): List<TelemetryData>
-        + findByDeviceIdAndTimestampBetween(deviceId: UUID, start: Instant, end: Instant): List<TelemetryData>
+        + saveMeasurement(telemetryData: TelemetryData): void
+        + findMeasurements(deviceId: UUID, measurementName: String, start: Instant, end: Instant): List<TelemetryData>
     }
 
     class TelemetryController {
-        + getLatestTelemetry(deviceId: UUID): ResponseEntity<TelemetryDto>
-        + getTelemetryHistory(deviceId: UUID, start: Instant, end: Instant): ResponseEntity<List<TelemetryDto>>
-    }
-
-    class EventPublisher {
-        + publishTelemetryEvent(telemetryEvent: TelemetryEvent): void
+        + getLatestMeasurement(deviceId: UUID, measurementName: String): ResponseEntity<TelemetryDataDto>
+        + getMeasurementHistory(deviceId: UUID, measurementName: String, start: Instant, end: Instant): ResponseEntity<List<TelemetryDataDto>>
     }
 
     class TelemetryMessage {
         - deviceId: UUID
         - timestamp: Instant
-        - data: Map<String, Object>
+        - measurements: Map<String, Float>
+        - tags: Map<String, String>
     }
 
     class TelemetryData {
-        - id: UUID
-        - deviceId: UUID
         - timestamp: Instant
-        - data: Map<String, Object>
+        - deviceId: UUID
+        - measurementName: String
+        - value: Float
+        - tags: Map<String, String>
     }
 
-    class TelemetryEvent {
-        - deviceId: UUID
-        - eventType: TelemetryEventType
-        - data: Map<String, Object>
-        - timestamp: Instant
-    }
+     class TelemetryEvent {
+            - deviceId: UUID
+            - eventType: TelemetryEventType
+            - data: Map<String, Object>
+            - timestamp: Instant
+        }
 
-    enum TelemetryEventType {
+     enum TelemetryEventType {
         TELEMETRY_RECEIVED
-    }
+     }
 
     ' Взаимосвязи
     TelemetryConsumer --> TelemetryProcessor : использует
     TelemetryProcessor --> TelemetryRepository : использует
-    TelemetryProcessor --> EventPublisher : использует
     TelemetryController --> TelemetryRepository : использует
+    TelemetryProcessor ..> TelemetryData : создаёт
+    TelemetryController ..> TelemetryDataDto : возвращает
+    TelemetryProcessor --> EventPublisher : использует
     EventPublisher ..> KafkaTemplate : использует
     TelemetryConsumer ..> MqttListener : слушает топик
-    TelemetryRepository ..|> CrudRepository
-    TelemetryProcessor ..> TelemetryData : создаёт
-    TelemetryController ..> TelemetryDto : возвращает
 
     class KafkaTemplate
     class MqttListener
