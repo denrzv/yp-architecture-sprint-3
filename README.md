@@ -49,6 +49,10 @@ provider_installation {
 ## Применяем terraform конфигурацию 
 
 ```bash
+helm dependency update charts/smart-home-monolith
+```
+
+```bash
 cd terraform
 terraform apply
 ```
