@@ -45,6 +45,7 @@
 ```bash
 git clone https://github.com/denrzv/yp-architecture-sprint-3.git
 cd yp-architecture-sprint-3
+git checkout sprint_3
 ```
 
 Запуск сервисов:
@@ -56,7 +57,7 @@ docker compose up -d && docker compose logs -f
 После запуска всех контейнеров выполняем создание устройства:
 
 ```bash
-curl -v -X POST http://localhost:8081/api/devices \
+curl -v POST http://localhost:8081/api/devices \
      -H "Content-Type: application/json" \
      -d '{
            "name": "Thermostat Living Room",
